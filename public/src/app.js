@@ -12,7 +12,8 @@ function run(text) {
     const words = text.split(/\s+/);
 
     let wordCounts = {};
-    for (const word of words) {
+    for (let word of words) {
+        word = word.toLowerCase();
         if (word in wordCounts) {
             // word already exists, so increase count
             wordCounts[word]++;
