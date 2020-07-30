@@ -1,4 +1,9 @@
+let wordCounts = {};
+// need to store keys separately to be able to sort them, cannot sort a dictionary directly
+let wordKeys = [];
+
 function start() {
+    // load text from file
     fetch("assets/all_star_lyrics.txt")
         .then(response => response.text())
         .then(text => run(text));
@@ -8,10 +13,6 @@ function run(text) {
     // split text into words
     // use regex: \s => split on any whitespace (including tab, newline), + => one or more
     const words = text.split(/\s+/);
-
-    let wordCounts = {};
-    // need to store keys separately to be able to sort them, cannot sort a dictionary directly
-    let wordKeys = [];
 
     // count the words
     for (let word of words) {
@@ -36,4 +37,28 @@ function run(text) {
     for (const wordKey of wordKeys) {
         console.log(wordKey + " : " + wordCounts[wordKey]);
     }
+
+    // print words and their counts in a table
+    const tableDiv = document.getElementById("wordTable");
+    tableDiv.innerHTML = createWordTableHTML();
+}
+
+// create html table containing the words and their counts
+function createWordTableHTML() {
+    let html = "<table>";
+
+    // header
+    html += "<tr><th>Word</th><th>Count</th></tr>";
+
+    // row for each word
+    for (const key of wordKeys) {
+        html += "<tr>";
+        html += "<td>" + key + "</td>";
+        html += "<td>" + wordCounts[key] + "</td>";
+        html += "</tr>";
+    }
+
+    html += "</table>";
+
+    return html;
 }
