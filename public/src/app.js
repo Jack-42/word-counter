@@ -34,10 +34,6 @@ function run(text) {
         return wordCounts[b] - wordCounts[a];
     });
 
-    for (const wordKey of wordKeys) {
-        console.log(wordKey + " : " + wordCounts[wordKey]);
-    }
-
     // print words and their counts in a table
     const tableDiv = document.getElementById("wordTable");
     tableDiv.innerHTML = createWordTableHTML();
