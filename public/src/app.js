@@ -12,13 +12,17 @@ function onTextFileChanged() {
 
     const reader = new FileReader();
     reader.onload = () => {
-        run(reader.result);
+        processText(reader.result);
     }
     // can assume length is 1, multiple files not allowed
     reader.readAsText(files[0]);
 }
 
-function run(text) {
+function processText(text) {
+    // clear data
+    wordCounts = {};
+    wordKeys = [];
+
     // split text into words
     // use regex: \s => split on any whitespace (including tab, newline), + => one or more
     const words = text.split(/\s+/);
