@@ -2,14 +2,27 @@ let wordCounts = {};
 // need to store keys separately to be able to sort them, cannot sort a dictionary directly
 let wordKeys = [];
 
-function start() {
-    // load text from file
-    fetch("assets/all_star_lyrics.txt")
-        .then(response => response.text())
-        .then(text => run(text));
+function onTextFileChanged() {
+    const textFileElement = document.getElementById("text-file");
+    const files = textFileElement.files;
+
+    if (files.length === 0) {
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+        processText(reader.result);
+    }
+    // can assume length is 1, multiple files not allowed
+    reader.readAsText(files[0]);
 }
 
-function run(text) {
+function processText(text) {
+    // clear data
+    wordCounts = {};
+    wordKeys = [];
+
     // split text into words
     // use regex: \s => split on any whitespace (including tab, newline), + => one or more
     const words = text.split(/\s+/);
