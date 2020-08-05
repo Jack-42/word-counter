@@ -40,9 +40,14 @@ function processText(text) {
 
 function preprocessText(text) {
     // convert to lowercase, uppercase and lowercase should be treated as the same word
-    let result = text.toLowerCase();
+    let processedText = text.toLowerCase();
 
-    return result;
+    // remove special chars. e.g. "it", "it,", "it." should all count as the same word
+    // use regex: ^ => negation, \w => word character (letter, digit and underscore), \s => whitespace
+    // g => global match, finds all matches rather than only the first one
+    processedText = processedText.replace(/[^\w\s]/g, "");
+
+    return processedText;
 }
 
 function countWords(words) {
