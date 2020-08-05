@@ -21,25 +21,11 @@ function onTextFileChanged() {
 function processText(text) {
     const processedText = preprocessText(text);
 
-    // clear data
-    wordCounts = {};
-    wordKeys = [];
-
     // split text into words
     // use regex: \s => split on any whitespace (including tab, newline), + => one or more
     const words = processedText.split(/\s+/);
 
-    // count the words
-    for (const word of words) {
-        if (word in wordCounts) {
-            // word already exists, so increase count
-            wordCounts[word]++;
-        } else {
-            // new word, so init count to 1
-            wordCounts[word] = 1;
-            wordKeys.push(word);
-        }
-    }
+    countWords(words);
 
     // sort words by count descending
     wordKeys.sort((a, b) => {
@@ -57,6 +43,22 @@ function preprocessText(text) {
     let result = text.toLowerCase();
 
     return result;
+}
+
+function countWords(words) {
+    wordCounts = {};
+    wordKeys = [];
+
+    for (const word of words) {
+        if (word in wordCounts) {
+            // word already exists, so increase count
+            wordCounts[word]++;
+        } else {
+            // new word, so init count to 1
+            wordCounts[word] = 1;
+            wordKeys.push(word);
+        }
+    }
 }
 
 // create html table containing the words and their counts
