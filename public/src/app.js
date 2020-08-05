@@ -19,18 +19,18 @@ function onTextFileChanged() {
 }
 
 function processText(text) {
+    const processedText = preprocessText(text);
+
     // clear data
     wordCounts = {};
     wordKeys = [];
 
     // split text into words
     // use regex: \s => split on any whitespace (including tab, newline), + => one or more
-    const words = text.split(/\s+/);
+    const words = processedText.split(/\s+/);
 
     // count the words
-    for (let word of words) {
-        // convert to lowercase, uppercase and lowercase should be treated as the same word
-        word = word.toLowerCase();
+    for (const word of words) {
         if (word in wordCounts) {
             // word already exists, so increase count
             wordCounts[word]++;
@@ -50,6 +50,13 @@ function processText(text) {
     // print words and their counts in a table
     const tableDiv = document.getElementById("wordTable");
     tableDiv.innerHTML = createWordTableHTML();
+}
+
+function preprocessText(text) {
+    // convert to lowercase, uppercase and lowercase should be treated as the same word
+    let result = text.toLowerCase();
+
+    return result;
 }
 
 // create html table containing the words and their counts
