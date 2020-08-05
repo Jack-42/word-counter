@@ -19,27 +19,13 @@ function onTextFileChanged() {
 }
 
 function processText(text) {
-    // clear data
-    wordCounts = {};
-    wordKeys = [];
+    const processedText = preprocessText(text);
 
     // split text into words
     // use regex: \s => split on any whitespace (including tab, newline), + => one or more
-    const words = text.split(/\s+/);
+    const words = processedText.split(/\s+/);
 
-    // count the words
-    for (let word of words) {
-        // convert to lowercase, uppercase and lowercase should be treated as the same word
-        word = word.toLowerCase();
-        if (word in wordCounts) {
-            // word already exists, so increase count
-            wordCounts[word]++;
-        } else {
-            // new word, so init count to 1
-            wordCounts[word] = 1;
-            wordKeys.push(word);
-        }
-    }
+    countWords(words);
 
     // sort words by count descending
     wordKeys.sort((a, b) => {
@@ -50,6 +36,39 @@ function processText(text) {
     // print words and their counts in a table
     const tableDiv = document.getElementById("wordTable");
     tableDiv.innerHTML = createWordTableHTML();
+}
+
+function preprocessText(text) {
+    // convert to lowercase, uppercase and lowercase should be treated as the same word
+    let processedText = text.toLowerCase();
+
+    // remove special chars. e.g. "it", "it,", "it." should all count as the same word
+    // use regex: ^ => negation, \w => word character (letter, digit and underscore), \s => whitespace
+    // g => global match, finds all matches rather than only the first one
+    // [] defines a character group, all inside of it matches one character
+    processedText = processedText.replace(/[^\w\s]/g, "");
+
+    // remove numbers
+    // use regex: \d => digit
+    processedText = processedText.replace(/\d/g, "");
+
+    return processedText;
+}
+
+function countWords(words) {
+    wordCounts = {};
+    wordKeys = [];
+
+    for (const word of words) {
+        if (word in wordCounts) {
+            // word already exists, so increase count
+            wordCounts[word]++;
+        } else {
+            // new word, so init count to 1
+            wordCounts[word] = 1;
+            wordKeys.push(word);
+        }
+    }
 }
 
 // create html table containing the words and their counts
