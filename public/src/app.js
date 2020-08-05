@@ -45,7 +45,12 @@ function preprocessText(text) {
     // remove special chars. e.g. "it", "it,", "it." should all count as the same word
     // use regex: ^ => negation, \w => word character (letter, digit and underscore), \s => whitespace
     // g => global match, finds all matches rather than only the first one
+    // [] defines a character group, all inside of it matches one character
     processedText = processedText.replace(/[^\w\s]/g, "");
+
+    // remove numbers
+    // use regex: \d => digit
+    processedText = processedText.replace(/\d/g, "");
 
     return processedText;
 }
