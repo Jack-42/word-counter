@@ -5,6 +5,7 @@ let wordKeys = [];
 
 let totalWordCount = 0;
 let uniqueWordCount = 0;
+let averageWordLength = 0.0;
 
 function onTextFileChanged() {
     const textFileElement = document.getElementById("text-file");
@@ -29,7 +30,7 @@ function processText(text) {
     totalWordCount = words.length;
     countWords(words);
     uniqueWordCount = wordKeys.length;
-
+    calculateAverageWordLength();
     sortByFrequency();
 
     // print general statistics
@@ -83,12 +84,34 @@ function countWords(words) {
     }
 }
 
+function calculateAverageWordLength() {
+    let sum = 0;
+
+    for (const key of wordKeys) {
+        sum += wordStatistics[key].length;
+    }
+
+    averageWordLength = sum / wordKeys.length;
+}
+
 function sortByFrequency() {
     wordKeys.sort((a, b) => {
         // descending order
         // trick: if order is ascending, subtraction results into positive number, so elements will be swapped
         return wordStatistics[b].frequency - wordStatistics[a].frequency;
     });
+}
+
+function createGeneralStatisticsHTML() {
+    let html = "<ul>";
+
+    html += "<li>Total word count: " + totalWordCount + "</li>";
+    html += "<li>Unique word count: " + uniqueWordCount + "</li>";
+    html += "<li>Average word length: " + averageWordLength.toFixed(2) + "</li>";
+
+    html += "</ul>";
+
+    return html;
 }
 
 // create html table containing the words and their counts
@@ -112,17 +135,6 @@ function createWordTableHTML() {
     }
 
     html += "</table>";
-
-    return html;
-}
-
-function createGeneralStatisticsHTML() {
-    let html = "<ul>";
-
-    html += "<li>Total word count: " + totalWordCount + "</li>";
-    html += "<li>Unique word count: " + uniqueWordCount + "</li>";
-
-    html += "</ul>";
 
     return html;
 }
