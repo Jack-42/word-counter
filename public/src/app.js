@@ -24,18 +24,13 @@ function onTextFileChanged() {
 
 function processText(text) {
     const processedText = preprocessText(text);
+    const words = tokenize(processedText);
 
-    // split text into words
-    // use regex: \s => split on any whitespace (including tab, newline), + => one or more
-    const words = processedText.split(/\s+/);
-
+    totalWordCount = words.length;
     countWords(words);
+    uniqueWordCount = wordKeys.length;
 
-    // sort words by count descending
-    wordKeys.sort((a, b) => {
-        // trick: positive number means wrong order, elements will be swapped
-        return wordStatistics[b].frequency - wordStatistics[a].frequency;
-    });
+    sortByFrequency();
 
     // print general statistics
     const generalStatisticsDiv = document.getElementById("generalStatistics");
@@ -63,11 +58,14 @@ function preprocessText(text) {
     return processedText;
 }
 
+function tokenize(text) {
+    // use regex: \s => split on any whitespace (including tab, newline), + => one or more
+    return text.split(/\s+/);
+}
+
 function countWords(words) {
     wordStatistics = {};
     wordKeys = [];
-
-    totalWordCount = words.length;
 
     for (const word of words) {
         if (word in wordStatistics) {
@@ -83,8 +81,14 @@ function countWords(words) {
             wordKeys.push(word);
         }
     }
+}
 
-    uniqueWordCount = wordKeys.length;
+function sortByFrequency() {
+    wordKeys.sort((a, b) => {
+        // descending order
+        // trick: if order is ascending, subtraction results into positive number, so elements will be swapped
+        return wordStatistics[b].frequency - wordStatistics[a].frequency;
+    });
 }
 
 // create html table containing the words and their counts
