@@ -1,5 +1,5 @@
 // TODO: extract into class, no global variables!
-let wordCounts = {};
+let wordStatistics = {};
 // need to store keys separately to be able to sort them, cannot sort a dictionary directly
 let wordKeys = [];
 
@@ -34,7 +34,7 @@ function processText(text) {
     // sort words by count descending
     wordKeys.sort((a, b) => {
         // trick: positive number means wrong order, elements will be swapped
-        return wordCounts[b] - wordCounts[a];
+        return wordStatistics[b].frequency - wordStatistics[a].frequency;
     });
 
     // print general statistics
@@ -64,18 +64,21 @@ function preprocessText(text) {
 }
 
 function countWords(words) {
-    wordCounts = {};
+    wordStatistics = {};
     wordKeys = [];
 
     totalWordCount = words.length;
 
     for (const word of words) {
-        if (word in wordCounts) {
-            // word already exists, so increase count
-            wordCounts[word]++;
+        if (word in wordStatistics) {
+            // word already exists, so increase frequency
+            wordStatistics[word].frequency++;
+            wordStatistics[word].probability = wordStatistics[word].frequency / totalWordCount;
         } else {
-            // new word, so init count to 1
-            wordCounts[word] = 1;
+            // new word, so init frequency to 1
+            wordStatistics[word] = {};
+            wordStatistics[word].frequency = 1;
+            wordStatistics[word].probability = 1 / totalWordCount;
             wordKeys.push(word);
         }
     }
@@ -88,7 +91,7 @@ function createWordTableHTML() {
     let html = "<table>";
 
     // header
-    html += "<tr><th>ID</th><th>Word</th><th>Count</th></tr>";
+    html += "<tr><th>ID</th><th>Word</th><th>Frequency</th><th>Probability</th></tr>";
 
     // row for each word
     for (let i = 0; i < wordKeys.length; i++) {
@@ -96,7 +99,9 @@ function createWordTableHTML() {
         html += "<tr>";
         html += "<td>" + (i + 1) + "</td>";
         html += "<td>" + key + "</td>";
-        html += "<td>" + wordCounts[key] + "</td>";
+        html += "<td>" + wordStatistics[key].frequency + "</td>";
+        const probabilityPercent = wordStatistics[key].probability * 100.0;
+        html += "<td>" + probabilityPercent.toFixed(2) + "%" + "</td>";
         html += "</tr>";
     }
 
