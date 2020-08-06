@@ -1,6 +1,10 @@
+// TODO: extract into class, no global variables!
 let wordCounts = {};
 // need to store keys separately to be able to sort them, cannot sort a dictionary directly
 let wordKeys = [];
+
+let totalWordCount = 0;
+let uniqueWordCount = 0;
 
 function onTextFileChanged() {
     const textFileElement = document.getElementById("text-file");
@@ -33,6 +37,10 @@ function processText(text) {
         return wordCounts[b] - wordCounts[a];
     });
 
+    // print general statistics
+    const generalStatisticsDiv = document.getElementById("generalStatistics");
+    generalStatisticsDiv.innerHTML = createGeneralStatisticsHTML();
+
     // print words and their counts in a table
     const tableDiv = document.getElementById("wordTable");
     tableDiv.innerHTML = createWordTableHTML();
@@ -59,6 +67,8 @@ function countWords(words) {
     wordCounts = {};
     wordKeys = [];
 
+    totalWordCount = words.length;
+
     for (const word of words) {
         if (word in wordCounts) {
             // word already exists, so increase count
@@ -69,6 +79,8 @@ function countWords(words) {
             wordKeys.push(word);
         }
     }
+
+    uniqueWordCount = wordKeys.length;
 }
 
 // create html table containing the words and their counts
@@ -87,6 +99,17 @@ function createWordTableHTML() {
     }
 
     html += "</table>";
+
+    return html;
+}
+
+function createGeneralStatisticsHTML() {
+    let html = "<ul>";
+
+    html += "<li>Total word count: " + totalWordCount + "</li>";
+    html += "<li>Unique word count: " + uniqueWordCount + "</li>";
+
+    html += "</ul>";
 
     return html;
 }
