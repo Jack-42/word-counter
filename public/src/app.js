@@ -1,4 +1,3 @@
-// TODO: extract into class, no global variables!
 let wordStatistics = {};
 // need to store keys separately to be able to sort them, cannot sort a dictionary directly
 let wordKeys = [];
@@ -71,14 +70,12 @@ function countWords(words) {
     for (const word of words) {
         if (word in wordStatistics) {
             // word already exists
-            wordStatistics[word].frequency++;
-            wordStatistics[word].probability = wordStatistics[word].frequency / totalWordCount;
+            const currWordStatistics = wordStatistics[word];
+            currWordStatistics.frequency++;
+            currWordStatistics.probability = currWordStatistics.frequency / totalWordCount;
         } else {
             // new word
-            wordStatistics[word] = {};
-            wordStatistics[word].frequency = 1;
-            wordStatistics[word].probability = 1 / totalWordCount;
-            wordStatistics[word].length = word.length;
+            wordStatistics[word] = new WordStatistics(1, 1 / totalWordCount, word.length);
             wordKeys.push(word);
         }
     }
