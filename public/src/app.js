@@ -88,7 +88,7 @@ function createWordTableHTML() {
     let html = "<table>";
 
     // header
-    html += "<tr><th>ID</th></th><th>Word</th><th>Count</th></tr>";
+    html += "<tr><th>ID</th><th>Word</th><th>Count</th></tr>";
 
     // row for each word
     for (let i = 0; i < wordKeys.length; i++) {
