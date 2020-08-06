@@ -72,10 +72,12 @@ function countWords(words) {
             // word already exists
             const currWordStatistics = wordStatistics[word];
             currWordStatistics.frequency++;
-            currWordStatistics.probability = currWordStatistics.frequency / totalWordCount;
+            currWordStatistics.updateProbability(totalWordCount);
         } else {
             // new word
-            wordStatistics[word] = new WordStatistics(1, 1 / totalWordCount, word.length);
+            const currWordStatistics = new WordStatistics(1, word.length);
+            currWordStatistics.updateProbability(totalWordCount);
+            wordStatistics[word] = currWordStatistics;
             wordKeys.push(word);
         }
     }

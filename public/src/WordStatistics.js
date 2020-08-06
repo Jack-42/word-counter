@@ -3,9 +3,12 @@ class WordStatistics {
     probability = 0.0;
     length = 0;
 
-    constructor(frequency, probability, length) {
+    constructor(frequency, length) {
         this.frequency = frequency;
-        this.probability = probability;
         this.length = length;
+    }
+
+    updateProbability(totalWordCount) {
+        this.probability = this.frequency / totalWordCount;
     }
 }
