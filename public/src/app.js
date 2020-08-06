@@ -88,11 +88,13 @@ function createWordTableHTML() {
     let html = "<table>";
 
     // header
-    html += "<tr><th>Word</th><th>Count</th></tr>";
+    html += "<tr><th>ID</th></th><th>Word</th><th>Count</th></tr>";
 
     // row for each word
-    for (const key of wordKeys) {
+    for (let i = 0; i < wordKeys.length; i++) {
+        const key = wordKeys[i];
         html += "<tr>";
+        html += "<td>" + (i + 1) + "</td>";
         html += "<td>" + key + "</td>";
         html += "<td>" + wordCounts[key] + "</td>";
         html += "</tr>";
