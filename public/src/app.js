@@ -71,14 +71,15 @@ function countWords(words) {
 
     for (const word of words) {
         if (word in wordStatistics) {
-            // word already exists, so increase frequency
+            // word already exists
             wordStatistics[word].frequency++;
             wordStatistics[word].probability = wordStatistics[word].frequency / totalWordCount;
         } else {
-            // new word, so init frequency to 1
+            // new word
             wordStatistics[word] = {};
             wordStatistics[word].frequency = 1;
             wordStatistics[word].probability = 1 / totalWordCount;
+            wordStatistics[word].length = word.length;
             wordKeys.push(word);
         }
     }
@@ -91,7 +92,7 @@ function createWordTableHTML() {
     let html = "<table>";
 
     // header
-    html += "<tr><th>ID</th><th>Word</th><th>Frequency</th><th>Probability</th></tr>";
+    html += "<tr><th>ID</th><th>Word</th><th>Frequency</th><th>Probability</th><th>Length</th></tr>";
 
     // row for each word
     for (let i = 0; i < wordKeys.length; i++) {
@@ -100,8 +101,9 @@ function createWordTableHTML() {
         html += "<td>" + (i + 1) + "</td>";
         html += "<td>" + key + "</td>";
         html += "<td>" + wordStatistics[key].frequency + "</td>";
-        const probabilityPercent = wordStatistics[key].probability * 100.0;
-        html += "<td>" + probabilityPercent.toFixed(2) + "%" + "</td>";
+        const probabilityInPercent = wordStatistics[key].probability * 100.0;
+        html += "<td>" + probabilityInPercent.toFixed(4) + " %</td>";
+        html += "<td>" + wordStatistics[key].length + "</td>";
         html += "</tr>";
     }
 
